@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withVegLabel } from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 // import useOnline from "../../utils/useOnline";
@@ -11,6 +11,8 @@ const Body = () => {
   const [originalRestaurantData, setOriginalRestaurantData] = useState([]);
   // const isOnline = useOnline()
 
+  const RestaurentCardVeg = withVegLabel(RestaurantCard);
+
   const url =
     "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.37240&lng=78.43780&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
 
@@ -19,7 +21,8 @@ const Body = () => {
       try {
         const res = await fetch(url);
         const data = await res.json();
-        const restaurants = data.data.cards[1].card.card.gridElements.infoWithStyle.restaurants;
+        const restaurants =
+          data.data.cards[1].card.card.gridElements.infoWithStyle.restaurants;
         setRestaurantData(restaurants);
         setOriginalRestaurantData(restaurants); // Store original data
       } catch (error) {
@@ -42,13 +45,13 @@ const Body = () => {
     <div>
       <div className=" w-full flex justify-center m-3">
         <input
-         className=" outline p-1 w-[400px] rounded-md mr-5"
+          className=" outline p-1 w-[400px] rounded-md mr-5"
           type="text"
           placeholder="Search by name..."
           onChange={handleSearch}
         />
         <button
-        className=" bg-slate-500 text-white px-4 rounded-md hover:bg-black"
+          className=" bg-slate-500 text-white px-4 rounded-md hover:bg-black"
           onClick={() => {
             const filteredData = restaurantData.filter((restaurant) =>
               restaurant.info.name.toLowerCase().includes(search.toLowerCase())
@@ -62,16 +65,26 @@ const Body = () => {
       <div className=" flex flex-wrap justify-center">
         {restaurantData.length === 0 ? (
           <Shimmer />
+        ) : filterRestaurantData.length === 0 ? (
+          restaurantData.map((each) => (
+            <Link to={"./restaurantmenu/" + each.info.id}>
+              {each.info.veg ? (
+                <RestaurentCardVeg key={each.info.id} item={each} />
+              ) : (
+                <RestaurantCard key={each.info.id} item={each} />
+              )}
+            </Link>
+          ))
         ) : (
-          filterRestaurantData.length === 0 ? (
-            restaurantData.map((each) => (
-              <Link to={'./restaurantmenu/'+each.info.id}><RestaurantCard key={each.info.id} item={each} /></Link>
-            ))
-          ) : (
-            filterRestaurantData.map((each) => (
-              <Link to={'./restaurantmenu/'+each.info.id}><RestaurantCard key={each.info.id} item={each} /></Link>
-            ))
-          )
+          filterRestaurantData.map((each) => (
+            <Link to={"./restaurantmenu/" + each.info.id}>
+              {each.info.veg ? (
+                <RestaurentCardVeg key={each.info.id} item={each} />
+              ) : (
+                <RestaurantCard key={each.info.id} item={each} />
+              )}
+            </Link>
+          ))
         )}
       </div>
     </div>

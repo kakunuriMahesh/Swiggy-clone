@@ -1,40 +1,32 @@
-// import React from "react";
-// import { Link } from "react-router-dom";
-
-// const RestaurantMenu = ()=>{
-//     return(
-//         <div>
-//             <Link to='/'><button>return to homepage</button></Link>
-//             RestaurantMenu
-//         </div>
-//     )
-// }
-// export default RestaurantMenu
-
-// import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import useRestaurantMenu from "../../utils/useRestaurantmenu";
+import RestaurantCategory from "./RestaurantCategory";
 
 const RestaurantMenu = () => {
   const { id } = useParams();
-  console.log(id)
+  // console.log(id)
   const menu = useRestaurantMenu(id);
   if (menu == null) return <h1>Data Loading</h1>;
-  console.log(menu)
+  // console.log(menu)
 
   const { name, costForTwoMessage } = menu.data.cards[2].card.card.info;
+  const categories= menu.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards
+  const filterCate = categories.filter(each=>each.card.card['@type']==='type.googleapis.com/swiggy.presentation.food.v2.ItemCategory')
+
+  // console.log(filterCate)
   
   return (
     <div>
       <h1>{name}</h1>
       <h4>{costForTwoMessage}</h4>
+      <RestaurantCategory items={filterCate}/>
       <button>
         {" "}
-        <Link to="/">return</Link>
+        {/* <Link to="/">return</Link> */}
       </button>
     </div>
-  );
+  ); 
 };
 
 export default RestaurantMenu;

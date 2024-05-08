@@ -4,7 +4,7 @@ import { menu_url } from "./constant"
 
 
 const useRestaurantMenu=(id)=>{
-    console.log(id)
+    // console.log(id)
     const [menu,setMenu]= useState(null)
     useEffect(()=>{
         const fetchMenu=async()=>{

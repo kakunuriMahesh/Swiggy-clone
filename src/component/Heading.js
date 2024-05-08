@@ -5,7 +5,7 @@ import useOnline from '../../utils/useOnline'
 const Heading=()=>{
     const isOnline = useOnline()
     return (
-        <div className=" flex justify-between items-center">
+        <div className=" flex justify-between items-center bg-slate-400 shadow-lg">
             <img className=" w-[100px]" src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPgyIpol4PBDm4zlf7IiKnw_Pvj5vt2FdmwQ&s"/>
             <ul className=" flex">
                 <li className=' m-3'>{isOnline?'🟢':'🔴'}</li>
